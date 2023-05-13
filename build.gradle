@@ -3,6 +3,7 @@ plugins {
     id 'org.springframework.boot' version '3.0.5'
     id 'io.spring.dependency-management' version '1.1.0'
     id 'com.google.cloud.tools.jib' version '3.3.1'
+    id "com.adarshr.test-logger" version "3.2.0"
 }
 
 group = 'it.oleynik'
@@ -60,5 +61,23 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    testlogger {
+        theme "mocha-parallel"
+        showExceptions true
+        showStackTraces false
+        showFullStackTraces false
+        showCauses false
+        slowThreshold 1000
+        showSummary true
+        showSimpleNames true
+        showPassed true
+        showSkipped false
+        showFailed true
+        showStandardStreams false
+        showPassedStandardStreams false
+        showSkippedStandardStreams false
+        showFailedStandardStreams false
+        logLevel "lifecycle"
+    }
 }
 
