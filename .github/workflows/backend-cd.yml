@@ -45,6 +45,6 @@ jobs:
             username: ${{ secrets.DOCKERHUB_USERNAME }}
             password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
         - name: Build Package and Push with Gradle
-          run:
+          run: gradle build jib
 
 
