@@ -1,6 +1,8 @@
-package it.oleynik.customer;
+package it.oleynik.integration;
 
 import it.oleynik.AbstractTestContainers;
+import it.oleynik.customer.Customer;
+import it.oleynik.customer.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class CustomerRepositoryTest extends AbstractTestContainers {
+class CustomerRepositoryIntegrationTest extends AbstractTestContainers {
 
     @Autowired
     private CustomerRepository underTest;

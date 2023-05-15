@@ -23,7 +23,7 @@ jib {
         }
     }
     to {
-        image = "$dockerUser/${rootProject.name}:$version"
+        image = "${dockerUser}/${rootProject.name}:$version"
         tags = [version, tag]
     }
 }
@@ -80,4 +80,3 @@ test {
         logLevel "lifecycle"
     }
 }
-
