@@ -29,22 +29,22 @@ jobs:
         run:
           working-directory: ./srs
 
-      steps:
-        - name: Checkout repo
-          uses: actions/checkout@v3
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
-        - name: Setup Java 17 with Gradle
-          uses: actions/setup-java@v3
-          with:
-            distribution: 'temurin'
-            java-version: '17'
-            cache: 'gradle'
-        - name: Login to Dockerhub
-          uses: docker/login-action@v2
-          with:
-            username: ${{ secrets.DOCKERHUB_USERNAME }}
-            password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
-        - name: Build Package and Push with Gradle
-          run: gradle build jib
+      - name: Setup Java 17 with Gradle
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+      - name: Login to Dockerhub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+      - name: Build Package and Push with Gradle
+        run: gradle build jib
 
 
