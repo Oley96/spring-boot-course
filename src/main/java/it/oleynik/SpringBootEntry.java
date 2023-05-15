@@ -13,7 +13,6 @@ public class SpringBootEntry {
 
     public static void main(String[] args) {
         SpringApplication.run(SpringBootEntry.class, args);
-
     }
 
     @Bean
