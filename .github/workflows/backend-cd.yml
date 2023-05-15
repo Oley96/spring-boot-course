@@ -17,13 +17,13 @@ jobs:
           POSTGRES_USER: amigoscode
           POSTGRES_PASSWORD: password
           POSTGRES_DB: amigoscode_db
-          ports:
-            - "5442:5432"
-          options: >-
-            --health-cmd pg_isready
-            --health-interval 10s
-            --health-timeout 5s
-            --health-retries 5
+        ports:
+          - "5442:5432"
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - name: Checkout repo
