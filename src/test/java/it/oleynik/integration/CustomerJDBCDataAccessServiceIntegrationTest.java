@@ -1,6 +1,9 @@
-package it.oleynik.customer;
+package it.oleynik.integration;
 
 import it.oleynik.AbstractTestContainers;
+import it.oleynik.customer.Customer;
+import it.oleynik.customer.CustomerJDBCDataAccessService;
+import it.oleynik.customer.CustomerRowMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +13,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class CustomerJDBCDataAccessServiceTest extends AbstractTestContainers {
+class CustomerJDBCDataAccessServiceIntegrationTest extends AbstractTestContainers {
 
     private CustomerJDBCDataAccessService underTest;
     private final CustomerRowMapper customerRowMapper = new CustomerRowMapper();

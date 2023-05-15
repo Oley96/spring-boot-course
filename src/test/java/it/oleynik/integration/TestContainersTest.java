@@ -1,5 +1,6 @@
-package it.oleynik;
+package it.oleynik.integration;
 
+import it.oleynik.AbstractTestContainers;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
