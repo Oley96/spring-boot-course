@@ -25,9 +25,9 @@ jobs:
             --health-timeout 5s
             --health-retries 5
 
-      defaults:
-        run:
-          working-directory: ./srs
+        defaults:
+          run:
+            working-directory: ./srs
 
     steps:
       - name: Checkout repo
