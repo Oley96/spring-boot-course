@@ -7,6 +7,7 @@ on:
     paths:
       - src/**
       - .github/**
+      - build.gradle
 
 jobs:
   deploy:
@@ -39,7 +40,7 @@ jobs:
       - name: Install Gradle
         uses: gradle/gradle-build-action@v2
         with:
-          gradle-version: 7.3
+          gradle-version: 7.4
 
       - name: Login to Dockerhub
         uses: docker/login-action@v2
