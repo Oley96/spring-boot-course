@@ -32,6 +32,8 @@ public class Customer {
     @Column(nullable = false)
     private Integer age;
 
+    private String gender;
+
     public Customer() {
     }
 
