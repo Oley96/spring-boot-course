@@ -1,9 +1,10 @@
 package it.oleynik.integration;
 
 import it.oleynik.AbstractTestContainers;
-import it.oleynik.customer.Customer;
-import it.oleynik.customer.CustomerJDBCDataAccessService;
-import it.oleynik.customer.CustomerRowMapper;
+import it.oleynik.customer.Gender;
+import it.oleynik.customer.db.Customer;
+import it.oleynik.customer.db.CustomerJDBCDataAccessService;
+import it.oleynik.customer.db.CustomerRowMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -32,7 +33,9 @@ class CustomerJDBCDataAccessServiceIntegrationTest extends AbstractTestContainer
         Customer customer = new Customer(
                 FAKER.name().fullName(),
                 FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID(),
-                20
+                20,
+                Gender.MALE,
+                "password"
         );
         underTest.insertCustomer(customer);
 
@@ -49,7 +52,9 @@ class CustomerJDBCDataAccessServiceIntegrationTest extends AbstractTestContainer
         Customer customer = new Customer(
                 FAKER.name().fullName(),
                 FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID(),
-                20
+                20,
+                Gender.FEMALE,
+                "password"
         );
         underTest.insertCustomer(customer);
         Integer id = underTest.selectAllCustomers()
@@ -89,7 +94,9 @@ class CustomerJDBCDataAccessServiceIntegrationTest extends AbstractTestContainer
         Customer customer = new Customer(
                 FAKER.name().fullName(),
                 FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID(),
-                20
+                20,
+                Gender.MALE,
+                "password"
         );
 
         underTest.insertCustomer(customer);
@@ -119,7 +126,9 @@ class CustomerJDBCDataAccessServiceIntegrationTest extends AbstractTestContainer
         Customer customer = new Customer(
                 FAKER.name().fullName(),
                 FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID(),
-                20
+                20,
+                Gender.FEMALE,
+                "password"
         );
 
         underTest.insertCustomer(customer);
@@ -153,7 +162,9 @@ class CustomerJDBCDataAccessServiceIntegrationTest extends AbstractTestContainer
         Customer customer = new Customer(
                 FAKER.name().fullName(),
                 FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID(),
-                20
+                20,
+                Gender.MALE,
+                "password"
         );
 
         underTest.insertCustomer(customer);
@@ -175,11 +186,14 @@ class CustomerJDBCDataAccessServiceIntegrationTest extends AbstractTestContainer
         Customer customer = new Customer(
                 FAKER.name().fullName(),
                 FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID(),
-                20
+                20,
+                Gender.FEMALE,
+                "password"
         );
 
         //When
         underTest.insertCustomer(customer);
+
         Customer existing = underTest.selectAllCustomers()
                 .stream()
                 .filter(c -> c.getEmail().equals(customer.getEmail()))
@@ -188,6 +202,7 @@ class CustomerJDBCDataAccessServiceIntegrationTest extends AbstractTestContainer
         existing.setEmail(FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID());
         existing.setName(FAKER.name().fullName());
         existing.setAge(23);
+        existing.setPassword("password");
 
         underTest.updateCustomer(existing);
 

@@ -1,5 +1,8 @@
-package it.oleynik.customer;
+package it.oleynik.unit;
 
+import it.oleynik.customer.Gender;
+import it.oleynik.customer.db.Customer;
+import it.oleynik.customer.db.CustomerRowMapper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,12 +37,14 @@ class CustomerRowMapperTest {
         when(rs.getInt("age")).thenReturn(age);
         when(rs.getString("name")).thenReturn(name);
         when(rs.getString("email")).thenReturn(email);
+        when(rs.getString("gender")).thenReturn(String.valueOf(Gender.FEMALE));
+        when(rs.getString("password")).thenReturn("password");
 
         // When
         Customer actual = underTest.mapRow(rs, 0);
 
         // Then
-        Customer expected = new Customer(id, name, email, age);
+        Customer expected = new Customer(id, name, email, age, Gender.FEMALE, "password");
         Assertions.assertThat(actual).isEqualTo(expected);
     }
 }

@@ -1,5 +1,9 @@
-package it.oleynik.customer;
+package it.oleynik.unit;
 
+import it.oleynik.customer.Gender;
+import it.oleynik.customer.db.Customer;
+import it.oleynik.customer.db.CustomerJPADataAccessService;
+import it.oleynik.customer.db.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,7 +48,7 @@ class CustomerJPADataAccessServiceTest {
     @Test
     void shouldInsertCustomer() {
         // Given
-        Customer customer = new Customer("Vova", "vova@gmail.com", 22);
+        Customer customer = new Customer("Vova", "vova@gmail.com", 22, Gender.FEMALE,  "password");
 
         // When
         underTest.insertCustomer(customer);
@@ -91,7 +95,7 @@ class CustomerJPADataAccessServiceTest {
 
     @Test
     void shouldUpdateCustomer() {
-        Customer customer = new Customer("Vova", "vova@gmail.com", 22);
+        Customer customer = new Customer("Vova", "vova@gmail.com", 22, Gender.FEMALE,  "password");
 
         // When
         underTest.updateCustomer(customer);

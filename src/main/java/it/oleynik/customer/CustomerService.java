@@ -1,9 +1,16 @@
 package it.oleynik.customer;
 
+import it.oleynik.customer.db.Customer;
+import it.oleynik.customer.db.CustomerDao;
+import it.oleynik.customer.dto.CustomerDTO;
+import it.oleynik.customer.dto.CustomerDTOMapper;
+import it.oleynik.customer.dto.CustomerRegistrationRequest;
+import it.oleynik.customer.dto.CustomerUpdateRequest;
 import it.oleynik.exception.DuplicatedResourceException;
 import it.oleynik.exception.RequestValidationException;
 import it.oleynik.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,17 +19,27 @@ import java.util.List;
 public class CustomerService {
 
     private final CustomerDao customerDao;
+    private final BCryptPasswordEncoder passwordEncoder;
+    private final CustomerDTOMapper customerDTOMapper;
 
-    public CustomerService(@Qualifier("jdbc") CustomerDao customerDao) {
+    public CustomerService(@Qualifier("jdbc") CustomerDao customerDao,
+                           BCryptPasswordEncoder passwordEncoder,
+                           CustomerDTOMapper customerDTOMapper) {
         this.customerDao = customerDao;
+        this.passwordEncoder = passwordEncoder;
+        this.customerDTOMapper = customerDTOMapper;
     }
 
-    public List<Customer> getAllCustomers() {
-        return customerDao.selectAllCustomers();
+    public List<CustomerDTO> getAllCustomers() {
+        return customerDao.selectAllCustomers()
+                .stream()
+                .map(customerDTOMapper)
+                .toList();
     }
 
-    public Customer getCustomer(Integer id) {
+    public CustomerDTO getCustomer(Integer id) {
         return customerDao.selectCustomerById(id)
+                .map(customerDTOMapper)
                 .orElseThrow(() -> new ResourceNotFoundException("customer with id [%s] not found".formatted(id)));
     }
 
@@ -32,7 +49,13 @@ public class CustomerService {
             throw new DuplicatedResourceException("email already taken");
         }
 
-        Customer customer = new Customer(request.name(), request.email(), request.age());
+        Customer customer = new Customer(
+                request.name(),
+                request.email(),
+                request.age(),
+                request.gender(),
+                passwordEncoder.encode(request.password())
+        );
         customerDao.insertCustomer(customer);
     }
 
@@ -48,7 +71,8 @@ public class CustomerService {
         if (!customerDao.existsCustomerWithId(id)) {
             throw new ResourceNotFoundException("customer with id [%s] not found".formatted(id));
         }
-        Customer customer = this.getCustomer(id);
+        Customer customer = customerDao.selectCustomerById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("customer with id [%s] not found".formatted(id)));
         boolean needToUpdate = false;
 
         if (request.name() != null && !request.name().equals(customer.getName())) {
@@ -67,6 +91,11 @@ public class CustomerService {
 
         if (request.age() != null && !request.age().equals(customer.getAge())) {
             customer.setAge(request.age());
+            needToUpdate = true;
+        }
+
+        if (request.gender() != null && !request.gender().equals(customer.getGender())) {
+            customer.setGender(request.gender());
             needToUpdate = true;
         }
 

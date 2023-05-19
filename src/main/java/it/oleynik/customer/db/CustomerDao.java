@@ -1,4 +1,4 @@
-package it.oleynik.customer;
+package it.oleynik.customer.db;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,4 +11,5 @@ public interface CustomerDao {
     boolean existsCustomerWithId(Integer id);
     void deleteCustomerById(Integer id);
     void updateCustomer(Customer customer);
+    Optional<Customer> selectUserByEmail(String email);
 }

@@ -38,3 +38,6 @@ out/
 
 ### OS X ###
 .DS_Store
+
+### Keys ###
+*.pem

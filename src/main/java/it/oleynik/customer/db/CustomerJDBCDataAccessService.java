@@ -1,4 +1,4 @@
-package it.oleynik.customer;
+package it.oleynik.customer.db;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -20,7 +20,7 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
     @Override
     public List<Customer> selectAllCustomers() {
         String sql = """
-                SELECT id, name, email, age
+                SELECT id, name, email, age, gender, password
                 FROM customer
                 """;
 
@@ -30,7 +30,7 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
     @Override
     public Optional<Customer> selectCustomerById(Integer id) {
         String sql = """
-                SELECT id, name, email, age
+                SELECT id, name, email, age, gender, password
                 FROM customer WHERE id = ?
                 """;
 
@@ -42,10 +42,11 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
     @Override
     public void insertCustomer(Customer customer) {
         var sql = """
-                INSERT INTO customer(name, email, age)
-                VALUES (?, ?, ?)
+                INSERT INTO customer(name, email, age, gender, password)
+                VALUES (?, ?, ?, ?, ?)
                 """;
-        jdbcTemplate.update(sql, customer.getName(), customer.getEmail(), customer.getAge());
+        jdbcTemplate.update(sql, customer.getName(), customer.getEmail(), customer.getAge(),
+                customer.getGender().name(), customer.getPassword());
     }
 
     @Override
@@ -85,9 +86,22 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
     public void updateCustomer(Customer customer) {
         var sql = """
                 UPDATE customer
-                SET name = ?, email = ?, age = ?
+                SET name = ?, email = ?, age = ?, gender = ?, password = ?
                 WHERE id = ?
                 """;
-        jdbcTemplate.update(sql, customer.getName(), customer.getEmail(), customer.getAge(), customer.getId());
+        jdbcTemplate.update(sql, customer.getName(), customer.getEmail(), customer.getAge(),
+                customer.getGender().name(), customer.getPassword(), customer.getId());
+    }
+
+    @Override
+    public Optional<Customer> selectUserByEmail(String email) {
+        String sql = """
+                SELECT id, name, email, age, gender, password
+                FROM customer WHERE email = ?
+                """;
+
+        return jdbcTemplate.query(sql, customerRowMapper, email)
+                .stream()
+                .findFirst();
     }
 }

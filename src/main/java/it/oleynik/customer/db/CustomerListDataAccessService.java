@@ -1,5 +1,6 @@
-package it.oleynik.customer;
+package it.oleynik.customer.db;
 
+import it.oleynik.customer.Gender;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -13,8 +14,8 @@ public class CustomerListDataAccessService implements CustomerDao {
 
     static {
         customers = new ArrayList<>();
-        customers.add(new Customer(1, "Vova", "oleynik@gmail.com", 15));
-        customers.add(new Customer(2, "Borys", "oleynik@gmail.com", 18));
+        customers.add(new Customer(1, "Vova", "oleynik@gmail.com", 15, Gender.FEMALE, "foobar"));
+        customers.add(new Customer(2, "Borys", "oleynik@gmail.com", 18, Gender.MALE, "foobar"));
     }
 
     @Override
@@ -52,5 +53,12 @@ public class CustomerListDataAccessService implements CustomerDao {
     @Override
     public void updateCustomer(Customer customer) {
         customers.add(customer);
+    }
+
+    @Override
+    public Optional<Customer> selectUserByEmail(String email) {
+        return customers.stream()
+                .filter(c -> c.getEmail().equals(email))
+                .findFirst();
     }
 }

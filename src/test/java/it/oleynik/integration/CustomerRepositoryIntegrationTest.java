@@ -1,8 +1,9 @@
 package it.oleynik.integration;
 
 import it.oleynik.AbstractTestContainers;
-import it.oleynik.customer.Customer;
-import it.oleynik.customer.CustomerRepository;
+import it.oleynik.customer.Gender;
+import it.oleynik.customer.db.Customer;
+import it.oleynik.customer.db.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,9 @@ class CustomerRepositoryIntegrationTest extends AbstractTestContainers {
         Customer customer = new Customer(
                 FAKER.name().fullName(),
                 FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID(),
-                20
+                20,
+                Gender.FEMALE,
+                "password"
         );
         Customer saved = underTest.save(customer);
 
@@ -57,7 +60,9 @@ class CustomerRepositoryIntegrationTest extends AbstractTestContainers {
         Customer customer = new Customer(
                 FAKER.name().fullName(),
                 FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID(),
-                20
+                20,
+                Gender.MALE,
+                "password"
         );
         Customer saved = underTest.save(customer);
 

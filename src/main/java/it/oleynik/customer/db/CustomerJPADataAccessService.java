@@ -1,4 +1,4 @@
-package it.oleynik.customer;
+package it.oleynik.customer.db;
 
 import org.springframework.stereotype.Repository;
 
@@ -47,5 +47,10 @@ public class CustomerJPADataAccessService implements CustomerDao {
     @Override
     public void updateCustomer(Customer customer) {
         customerRepository.save(customer);
+    }
+
+    @Override
+    public Optional<Customer> selectUserByEmail(String email) {
+        return customerRepository.findByEmail(email);
     }
 }
