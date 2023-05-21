@@ -19,7 +19,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) {
         return customerDao.selectUserByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("can't find user with email %s".formatted(email)));
     }

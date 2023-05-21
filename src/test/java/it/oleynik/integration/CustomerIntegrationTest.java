@@ -3,9 +3,7 @@ package it.oleynik.integration;
 import com.github.javafaker.Faker;
 import com.github.javafaker.Name;
 import it.oleynik.customer.Gender;
-import it.oleynik.customer.db.Customer;
 import it.oleynik.customer.dto.CustomerDTO;
-import it.oleynik.customer.dto.CustomerDTOMapper;
 import it.oleynik.customer.dto.CustomerRegistrationRequest;
 import it.oleynik.customer.dto.CustomerUpdateRequest;
 import org.assertj.core.api.Assertions;
@@ -27,8 +25,6 @@ class CustomerIntegrationTest {
 
     @Autowired
     private WebTestClient webTestClient;
-    @Autowired
-    private CustomerDTOMapper mapper;
 
     private static final Random RANDOM = new Random();
 
@@ -154,35 +150,40 @@ class CustomerIntegrationTest {
 
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(name, email, age, gender, "password");
 
-        webTestClient.post()
+        String token = webTestClient.post()
                 .uri("/api/v1/customers")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(Mono.just(request), CustomerRegistrationRequest.class)
                 .exchange()
                 .expectStatus()
-                .isOk();
+                .isOk()
+                .expectBody(String.class)
+                .returnResult()
+                .getResponseBody();;
 
-        List<Customer> allCustomers = webTestClient.get()
+        List<CustomerDTO> allCustomers = webTestClient.get()
                 .uri("/api/v1/customers")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus()
                 .isOk()
-                .expectBodyList(new ParameterizedTypeReference<Customer>() {
+                .expectBodyList(new ParameterizedTypeReference<CustomerDTO>() {
                 })
                 .returnResult()
                 .getResponseBody();
 
 
-        int id = allCustomers.stream().filter(customer -> customer.getEmail().equals(email))
-                .map(Customer::getId).findFirst().orElseThrow();
+        int id = allCustomers.stream().filter(customer -> customer.email().equals(email))
+                .map(CustomerDTO::id).findFirst().orElseThrow();
 
         // When
         String newName = "Vova";
         CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(newName, null, null, null);
         webTestClient.put()
                 .uri("/api/v1/customers/{id}", id)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(Mono.just(updateRequest), CustomerUpdateRequest.class)
@@ -190,16 +191,17 @@ class CustomerIntegrationTest {
                 .expectStatus()
                 .isOk();
 
-        Customer expected = new Customer(id, newName, email, age, gender, "password");
+        CustomerDTO expected = new CustomerDTO(id, newName, email, gender, age, List.of("ROLE_USER"), email);
 
         // Then
-        Customer actual = webTestClient.get()
+        CustomerDTO actual = webTestClient.get()
                 .uri("/api/v1/customers/{id}", id)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus()
                 .isOk()
-                .expectBody(new ParameterizedTypeReference<Customer>() {
+                .expectBody(new ParameterizedTypeReference<CustomerDTO>() {
                 })
                 .returnResult()
                 .getResponseBody();
