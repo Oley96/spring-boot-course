@@ -52,9 +52,11 @@ jobs:
         run: |
           pwd
           mkdir ./src/main/resources/keys
-          openssl genrsa  -out ./src/main/resources/keys/keypair.pem 2048
-          openssl rsa  -in keypair.pem  -pubout  -out ./src/main/resources/keys/public.pem
-          openssl pkcs8  -topk8  -inform PEM  -outform PEM  -nocrypt  -in keypair.pem  -out ./src/main/resources/keys/private.pem
+          cd ./src/main/resources/keys
+          openssl genrsa  -out keypair.pem 2048
+          openssl rsa  -in keypair.pem  -pubout  -out public.pem
+          openssl pkcs8  -topk8  -inform PEM  -outform PEM  -nocrypt  -in keypair.pem  -out private.pem
+          cd /home/runner/work/spring-boot-course/spring-boot-course
 
       - name: Build Package and Push with Gradle
         run: gradle clean build
