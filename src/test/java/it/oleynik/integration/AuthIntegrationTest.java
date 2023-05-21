@@ -24,7 +24,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class AuthIntegrationTest {
+class AuthIntegrationTest {
 
     @Autowired
     private WebTestClient webTestClient;

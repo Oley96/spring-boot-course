@@ -3,7 +3,7 @@ name: CI - Deploy Backend
 on:
   push:
     branches:
-      - main
+      - *
     paths:
       - src/**
       - .github/**
@@ -47,6 +47,14 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+
+      - name: Generate keys
+        run: |
+          pwd
+          mkdir src/main/resources/keys
+          openssl genrsa  -out ./src/main/resources/keys/keypair.pem 2048
+          openssl rsa  -in keypair.pem  -pubout  -out ./src/main/resources/keys/public.pem
+          openssl pkcs8  -topk8  -inform PEM  -outform PEM  -nocrypt  -in keypair.pem  -out ./src/main/resources/keys/private.pem
 
       - name: Build Package and Push with Gradle
         run: gradle clean build
