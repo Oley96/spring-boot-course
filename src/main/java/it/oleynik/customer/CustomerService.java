@@ -10,7 +10,7 @@ import it.oleynik.exception.DuplicatedResourceException;
 import it.oleynik.exception.RequestValidationException;
 import it.oleynik.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,11 +19,11 @@ import java.util.List;
 public class CustomerService {
 
     private final CustomerDao customerDao;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
     private final CustomerDTOMapper customerDTOMapper;
 
     public CustomerService(@Qualifier("jdbc") CustomerDao customerDao,
-                           BCryptPasswordEncoder passwordEncoder,
+                           PasswordEncoder passwordEncoder,
                            CustomerDTOMapper customerDTOMapper) {
         this.customerDao = customerDao;
         this.passwordEncoder = passwordEncoder;
