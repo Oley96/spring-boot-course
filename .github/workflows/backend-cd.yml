@@ -3,7 +3,7 @@ name: CI - Deploy Backend
 on:
   push:
     branches:
-      - *
+      - cd-workflow-test
     paths:
       - src/**
       - .github/**
